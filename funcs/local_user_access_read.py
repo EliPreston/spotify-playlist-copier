@@ -40,5 +40,5 @@ def get_playlists_personal(uID: str) -> list:
 # returns ID of playlist
 def get_most_recent_playlist(uID: str) -> str:
 
-    playlists = SP.user_playlists(uID, limit = 1)
+    playlists = SP.user_playlists(uID, limit = 1) # explicitly limit to 1 because that's all we want
     return playlists['items'][0]['id']

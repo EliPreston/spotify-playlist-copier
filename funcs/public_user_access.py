@@ -57,7 +57,7 @@ def copy_playlists(uID_other: str):
             tracks_to_add_titles = []
             loc_user_modify.create_playlist(UID, new_playlist_name)
 
-            tracks = sp.playlist_items(pID) # limit = xx (50 is default and the max)
+            tracks = sp.playlist_items(pID)
             for item in tracks['items']:
 
                 try:
