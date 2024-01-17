@@ -15,18 +15,27 @@ CLIENT_SECRET = os.environ['CLIENT_SECRET']
 UID = os.environ['USERNAME']
 uri = os.environ['REDIRECT_URI']
 
+ # scope not needed here
+SP = spotipy.Spotify(
+    auth_manager = SpotifyOAuth(
+        client_id = CLIENT_ID,
+        client_secret = CLIENT_SECRET,
+        username = UID,
+        redirect_uri = uri
+    )
+)
 
 
 # gets public playlists from spotify account
 # returns list of playlist objects
-def get_playlists_other(sp: spotipy.client.Spotify, uID_other: str) -> list:
+def get_playlists_other(uID_other: str) -> list:
 
-    playlists = sp.user_playlists(uID_other)
+    playlists = SP.user_playlists(uID_other)
     return playlists['items']
 
 
 # copy a one playlist (passed as name and id into function)
-def copy_single_playlist(sp, pName, pID):
+def copy_single_playlist(pName: str, pID: str) -> None:
 
     print(f'> Copying playlist {pName} : {pID}')
 
@@ -35,7 +44,7 @@ def copy_single_playlist(sp, pName, pID):
     tracks_to_add_titles = []
     loc_user_modify.create_playlist(UID, new_playlist_name)
 
-    tracks = sp.playlist_items(pID)
+    tracks = SP.playlist_items(pID)
     for item in tracks['items']:
 
         try:
@@ -60,7 +69,7 @@ def copy_single_playlist(sp, pName, pID):
         
 
 # prompt user if they want to copy the playlist
-def prompt_user_copy(sp, pName, pID):
+def prompt_user_copy(pName: str, pID: str) -> None:
 
     ask = input(f"Copy playlist {pName}? [Y/n] ")
     if (ask.lower() == 'y'):
@@ -69,19 +78,9 @@ def prompt_user_copy(sp, pName, pID):
 
 def copy_playlists(uID_other: str, prompting: bool) -> bool:
 
-    # scope not needed here
-    sp = spotipy.Spotify(
-        auth_manager = SpotifyOAuth(
-            client_id = CLIENT_ID,
-            client_secret = CLIENT_SECRET,
-            username = UID,
-            redirect_uri = uri
-        )
-    )    
-
     try:
-        playlists_to_copy = get_playlists_other(sp, uID_other)
-        displayname_other = sp.user(uID_other)['display_name']
+        playlists_to_copy = get_playlists_other(SP, uID_other)
+        displayname_other = SP.user(uID_other)['display_name']
         print(f'Copying {displayname_other}\'s playlists:')
 
         # Looping over playlists, 
