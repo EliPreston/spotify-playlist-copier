@@ -73,15 +73,15 @@ def prompt_user_copy(pName: str, pID: str) -> None:
 
     ask = input(f"Copy playlist {pName}? [Y/n] ")
     if (ask.lower() == 'y'):
-        copy_single_playlist(sp, pName, pID)
+        copy_single_playlist(pName, pID)
 
 
 def copy_playlists(uID_other: str, prompting: bool) -> bool:
 
     try:
-        playlists_to_copy = get_playlists_other(SP, uID_other)
+        playlists_to_copy = get_playlists_other(uID_other)
         displayname_other = SP.user(uID_other)['display_name']
-        print(f'Copying {displayname_other}\'s playlists:')
+        print(f'\nCopying {displayname_other}\'s playlists:')
 
         # Looping over playlists, 
         # creating new playlsit for current user, 
@@ -92,16 +92,16 @@ def copy_playlists(uID_other: str, prompting: bool) -> bool:
                 pID = playlist['id']
                 
                 if (prompting):
-                    prompt_user_copy(sp, pName, pID)
+                    prompt_user_copy(pName, pID)
                 else:
-                    copy_single_playlist(sp, pName, pID)
+                    copy_single_playlist(pName, pID)
 
             except Exception as e:
                 print("> error with a playlist, continuing...")
                 print(" => ", end="")
                 print(e)
         
-        print('All playlists copied')
+        print('Finished playlists, exiting.')
         return True
 
 
