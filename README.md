@@ -4,6 +4,7 @@
 
 ### Dependancies (modules)
 - os
+- time
 - spotipy
     - SpotifyOAuth (from spotipy.oauth2 import SpotifyOAuth)
 - dotenv
@@ -23,7 +24,7 @@ The Spotify/spotipy api('s) place some limits on the size of certain requests. F
         - USERNAME = ''
         - REDIRECT_URI = ''
     - Click on your newly created project > click on "Settings" and copy your Client ID & Client Secret into the corresponding variables in the .env file
-    - Similarily, your username (which is actually your user ID) goes into the USERNAME variable, and the redirect uri should match what you entered when setting up the app in step 2a (ex. http://localhost:3000)
+    - Similarily, your username (which is actually your user ID) goes into the USERNAME variable, and the redirect uri should match what you entered when setting up the app in step 2 (ex. http://localhost:3000)
 3. Get the user ID of the person you want to copy playlists from 
     - This can be done by clicking on their profile > the three dots next to the "following" button > the "Copy link to profile" option
     - Pasting this into a text file (or wherever) and copying the characters after the '...user/' and before the '?....'

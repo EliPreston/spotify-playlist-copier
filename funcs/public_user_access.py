@@ -25,7 +25,7 @@ def get_playlists_other(sp: spotipy.client.Spotify, uID_other: str) -> list:
     return playlists['items']
 
 
-def copy_playlists(uID_other: str):
+def copy_playlists(uID_other: str) -> bool:
 
     # scope not needed here
     sp = spotipy.Spotify(
@@ -37,56 +37,60 @@ def copy_playlists(uID_other: str):
         )
     )    
 
-    playlists_to_copy = get_playlists_other(sp, uID_other)
-    displayname_other = sp.user(uID_other)['display_name']
-    print(f'Copying {displayname_other}\'s playlists:')
+    try:
+        playlists_to_copy = get_playlists_other(sp, uID_other)
+        displayname_other = sp.user(uID_other)['display_name']
+        print(f'Copying {displayname_other}\'s playlists:')
 
-    # Looping over playlists, 
-    # creating new playlsit for current user, 
-    # appending all songs from external playlist to new (local) playlist
-    for playlist in playlists_to_copy:
+        # Looping over playlists, 
+        # creating new playlsit for current user, 
+        # appending all songs from external playlist to new (local) playlist
+        for playlist in playlists_to_copy:
 
-        try:
-            pName = playlist['name']
-            pID = playlist['id']
-            print(f'> Copying playlist {pName} : {pID}')
+            try:
+                pName = playlist['name']
+                pID = playlist['id']
+                print(f'> Copying playlist {pName} : {pID}')
 
 
-            new_playlist_name = pName + '-copy'
-            tracks_to_add = []
-            tracks_to_add_titles = []
-            loc_user_modify.create_playlist(UID, new_playlist_name)
+                new_playlist_name = pName + '-copy'
+                tracks_to_add = []
+                tracks_to_add_titles = []
+                loc_user_modify.create_playlist(UID, new_playlist_name)
 
-            tracks = sp.playlist_items(pID)
-            for item in tracks['items']:
+                tracks = sp.playlist_items(pID)
+                for item in tracks['items']:
 
-                try:
-                    trackName = item['track']['name']
-                    trackID = item['track']['id']
-                    # print(f'{trackName} : {trackID}')
+                    try:
+                        trackName = item['track']['name']
+                        trackID = item['track']['id']
+                        # print(f'{trackName} : {trackID}')
 
-                    if trackID != None:
-                        tracks_to_add.append(trackID)
-                        tracks_to_add_titles.append(trackName)
+                        if trackID != None:
+                            tracks_to_add.append(trackID)
+                            tracks_to_add_titles.append(trackName)
 
-                except Exception as e:
-                    print(" => error encountered with a track, passing over")
-                    print("  --> ", end="")
-                    print(e)
+                    except Exception as e:
+                        print(" => error encountered with a track, passing over")
+                        print("  --> ", end="")
+                        print(e)
 
-            print(' => Adding the following list of tracks: ', end="")
-            print(tracks_to_add_titles)
-            print("\n")
+                print('\n => Adding the following list of tracks: ', end="")
+                print(tracks_to_add_titles)
+                print("\n")
 
-            loc_user_modify.add_to_new_playlist(tracks_to_add)
+                loc_user_modify.add_to_new_playlist(tracks_to_add)
+            
+            except Exception as e:
+                print("> error with a playlist, continuing...")
+                print(" => ", end="")
+                print(e)
         
-        except Exception as e:
-            print("> error with a playlist, continuing...")
-            print(" => ", end="")
-            print(e)
-    
-    print('All playlists copied')
-        
+        print('All playlists copied')
+        return True
+    except Exception as e:
+        print(f'Error occured while copying: {e}')
+        return False
 
 
 
