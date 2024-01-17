@@ -9,6 +9,9 @@
 - dotenv
     - load_dotenv (from dotenv import load_dotenv)
 
+### Limit(ations)
+The Spotify/spotipy api('s) place some limits on the size of certain requests. For example, the spotipy user_playlists method limits the number of retrieved playlists to 50. This number is big enough that I don't think it puts that restrictive of a limitation on the capability of the code, but it is a limitation nonetheless.
+
 
 ### Setup and Usage
 1. Install modules via pip, brew, etc. 
